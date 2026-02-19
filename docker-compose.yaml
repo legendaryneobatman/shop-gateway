@@ -1,0 +1,27 @@
+services:
+  gateway:
+    container_name: shop-gateway
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: development
+    ports:
+      - "3000:3000"  # HTTP API доступен снаружи
+    environment:
+      NODE_ENV: development
+    env_file:
+      - .env
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+    networks:
+      - shop-network
+    restart: unless-stopped
+    logging:
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+networks:
+  shop-network:
+    external: true  # использовать существующую сеть

@@ -1,41 +1,32 @@
-import { Injectable } from '@nestjs/common';
-import {
-  SignInRequest,
-  SignInResponse,
-  SignUpRequest,
-  SignUpResponse,
-} from './auth.controller';
+import { Inject, Injectable, OnModuleInit } from '@nestjs/common';
+import { type ClientGrpc } from '@nestjs/microservices';
+import { firstValueFrom, Observable } from 'rxjs';
+
+interface SignInRequest {
+  username: string;
+  password: string;
+}
+
+interface SignInResponse {
+  accessToken: string;
+  refreshToken: string;
+}
+
+interface AuthGrpcService {
+  signIn(data: SignInRequest): Observable<SignInResponse>;
+}
 
 @Injectable()
-export class AuthService {
-  async SignIn(body: SignInRequest) {
-    const baseUrl = process.env.SHOP_BASE_URL;
+export class AuthService implements OnModuleInit {
+  private authGrpcService: AuthGrpcService;
 
-    const response = await fetch(`${baseUrl}/api/sign-in`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(body),
-    });
+  constructor(@Inject('AUTH_PACKAGE') private client: ClientGrpc) {}
 
-    const data = response.json() as Promise<SignInResponse>;
-
-    return await data;
+  onModuleInit() {
+    this.authGrpcService = this.client.getService<AuthGrpcService>('Auth');
   }
 
-  async SignUp(body: SignUpRequest) {
-    const baseUrl = process.env.SHOP_BASE_URL;
-
-    const response = await fetch(`${baseUrl}/api/sign-up`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(body),
-    });
-
-    const data = response.json() as Promise<SignUpResponse>;
-    return await data;
+  async signIn(data: SignInRequest): Promise<SignInResponse> {
+    return firstValueFrom(this.authGrpcService.signIn(data));
   }
 }

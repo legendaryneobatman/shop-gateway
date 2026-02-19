@@ -1,0 +1,3 @@
+[submodule "shop-proto-repo"]
+	path = shop-proto-repo
+	url = https://github.com/legendaryneobatman/shop-proto-repo
