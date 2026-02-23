@@ -1,6 +1,7 @@
 import { Inject, Injectable, OnModuleInit } from '@nestjs/common';
 import { type ClientGrpc } from '@nestjs/microservices';
 import { firstValueFrom, Observable } from 'rxjs';
+import { AUTH_SERVICE_NAME } from '../gen/nest/api/auth/v1/contracts';
 
 interface SignInRequest {
   username: string;
@@ -23,7 +24,8 @@ export class AuthService implements OnModuleInit {
   constructor(@Inject('AUTH_PACKAGE') private client: ClientGrpc) {}
 
   onModuleInit() {
-    this.authGrpcService = this.client.getService<AuthGrpcService>('Auth');
+    this.authGrpcService =
+      this.client.getService<AuthGrpcService>(AUTH_SERVICE_NAME);
   }
 
   async signIn(data: SignInRequest): Promise<SignInResponse> {

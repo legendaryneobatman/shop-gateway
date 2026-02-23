@@ -10,6 +10,13 @@ import { Observable } from "rxjs";
 
 export const protobufPackage = "contracts.v1";
 
+export enum UserRole {
+  ROLE_UNSPECIFIED = 0,
+  ADMIN = -1,
+  USER = 1,
+  MODERATOR = 2,
+}
+
 export interface SignInRequest {
   username: string;
   password: string;
@@ -20,29 +27,132 @@ export interface SignInResponse {
   refreshToken: string;
 }
 
+export interface GetUserRequest {
+}
+
+export interface GetUserResponse {
+  id: string;
+  name: string;
+  username: string;
+  email: string;
+  avatarUrl: string;
+  phone: string;
+  role: UserRole;
+  isActive: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface CreateUserRequest {
+  name: string;
+  username: string;
+  passwordHash: string;
+}
+
+export interface CreateUserResponse {
+  id: string;
+}
+
+export interface UpdateUserRequest {
+  id: string;
+  name: string;
+  username: string;
+  email: string;
+  avatarUrl: string;
+  phone: string;
+  role: UserRole;
+  isActive: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface UpdateUserResponse {
+  id: string;
+  name: string;
+  username: string;
+  email: string;
+  avatarUrl: string;
+  phone: string;
+  role: UserRole;
+  isActive: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface DeleteUserRequest {
+  id: string;
+}
+
+export interface DeleteUserResponse {
+  id: string;
+}
+
 export const CONTRACTS_V1_PACKAGE_NAME = "contracts.v1";
 
-export interface AuthClient {
+export interface AuthServiceClient {
   signIn(request: SignInRequest): Observable<SignInResponse>;
 }
 
-export interface AuthController {
+export interface AuthServiceController {
   signIn(request: SignInRequest): Promise<SignInResponse> | Observable<SignInResponse> | SignInResponse;
 }
 
-export function AuthControllerMethods() {
+export function AuthServiceControllerMethods() {
   return function (constructor: Function) {
     const grpcMethods: string[] = ["signIn"];
     for (const method of grpcMethods) {
       const descriptor: any = Reflect.getOwnPropertyDescriptor(constructor.prototype, method);
-      GrpcMethod("Auth", method)(constructor.prototype[method], method, descriptor);
+      GrpcMethod("AuthService", method)(constructor.prototype[method], method, descriptor);
     }
     const grpcStreamMethods: string[] = [];
     for (const method of grpcStreamMethods) {
       const descriptor: any = Reflect.getOwnPropertyDescriptor(constructor.prototype, method);
-      GrpcStreamMethod("Auth", method)(constructor.prototype[method], method, descriptor);
+      GrpcStreamMethod("AuthService", method)(constructor.prototype[method], method, descriptor);
     }
   };
 }
 
-export const AUTH_SERVICE_NAME = "Auth";
+export const AUTH_SERVICE_NAME = "AuthService";
+
+export interface UserServiceClient {
+  getUser(request: GetUserRequest): Observable<GetUserResponse>;
+
+  createUser(request: CreateUserRequest): Observable<CreateUserResponse>;
+
+  updateUser(request: UpdateUserRequest): Observable<UpdateUserResponse>;
+
+  deleteUser(request: DeleteUserRequest): Observable<DeleteUserResponse>;
+}
+
+export interface UserServiceController {
+  getUser(request: GetUserRequest): Promise<GetUserResponse> | Observable<GetUserResponse> | GetUserResponse;
+
+  createUser(
+    request: CreateUserRequest,
+  ): Promise<CreateUserResponse> | Observable<CreateUserResponse> | CreateUserResponse;
+
+  updateUser(
+    request: UpdateUserRequest,
+  ): Promise<UpdateUserResponse> | Observable<UpdateUserResponse> | UpdateUserResponse;
+
+  deleteUser(
+    request: DeleteUserRequest,
+  ): Promise<DeleteUserResponse> | Observable<DeleteUserResponse> | DeleteUserResponse;
+}
+
+export function UserServiceControllerMethods() {
+  return function (constructor: Function) {
+    const grpcMethods: string[] = ["getUser", "createUser", "updateUser", "deleteUser"];
+    for (const method of grpcMethods) {
+      const descriptor: any = Reflect.getOwnPropertyDescriptor(constructor.prototype, method);
+      GrpcMethod("UserService", method)(constructor.prototype[method], method, descriptor);
+    }
+    const grpcStreamMethods: string[] = [];
+    for (const method of grpcStreamMethods) {
+      const descriptor: any = Reflect.getOwnPropertyDescriptor(constructor.prototype, method);
+      GrpcStreamMethod("UserService", method)(constructor.prototype[method], method, descriptor);
+    }
+  };
+}
+
+export const USER_SERVICE_NAME = "UserService";
