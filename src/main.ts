@@ -3,8 +3,10 @@ import { AppModule } from './app.module';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  app.setGlobalPrefix('api');
+  app.setGlobalPrefix('api', { exclude: [''] });
   await app.listen(process.env.PORT ?? 3000);
-  console.log(`server started on port: ${process.env.PORT ?? 3000}`);
 }
-bootstrap();
+bootstrap().then(
+  () => console.log(`bootstrap successful`),
+  () => console.log('bootstrap failed'),
+);

@@ -1,7 +1,6 @@
 import { Inject, Injectable, OnModuleInit } from '@nestjs/common';
 import { type ClientGrpc } from '@nestjs/microservices';
 import { firstValueFrom, Observable } from 'rxjs';
-import { AUTH_SERVICE_NAME } from '../gen/nest/api/auth/v1/auth_service';
 import type {
   LogoutRequestDTO,
   RefreshRequestDTO,
@@ -11,6 +10,7 @@ import type {
   SignUpRequestDTO,
   SignUpResponseDTO,
 } from './auth.dto';
+import { AUTH_SERVICE_NAME } from '@legendaryneobatman/shop-proto-repo/gen/nest/api/v1/auth';
 
 interface AuthGrpcService {
   signIn(data: SignInRequestDTO): Observable<SignInResponseDTO>;

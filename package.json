@@ -25,7 +25,7 @@
     "@grpc/grpc-js": "^1.14.3",
     "@grpc/proto-loader": "^0.8.0",
     "@grpc/reflection": "^1.0.4",
-    "@legendaryneobatman/shop-proto-repo": "github:legendaryneobatman/shop-proto-repo#v0.0.5",
+    "@legendaryneobatman/shop-proto-repo": "github:legendaryneobatman/shop-proto-repo#v0.0.8",
     "@nestjs/common": "^11.0.1",
     "@nestjs/config": "^4.0.3",
     "@nestjs/core": "^11.0.1",
@@ -40,6 +40,7 @@
     "@nestjs/cli": "^11.0.0",
     "@nestjs/schematics": "^11.0.0",
     "@nestjs/testing": "^11.0.1",
+    "@types/bun": "latest",
     "@types/express": "^5.0.0",
     "@types/jest": "^30.0.0",
     "@types/node": "^22.10.7",
@@ -59,8 +60,7 @@
     "ts-proto": "^2.11.2",
     "tsconfig-paths": "^4.2.0",
     "typescript": "^5.7.3",
-    "typescript-eslint": "^8.20.0",
-    "@types/bun": "latest"
+    "typescript-eslint": "^8.20.0"
   },
   "jest": {
     "moduleFileExtensions": [

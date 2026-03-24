@@ -1,26 +1,23 @@
 import { join } from 'path';
+import { USER_V1_PACKAGE_NAME } from '@legendaryneobatman/shop-proto-repo/gen/nest/api/v1/user';
+import { AUTH_V1_PACKAGE_NAME } from '@legendaryneobatman/shop-proto-repo/gen/nest/api/v1/auth';
 
-const PROTO_BASE_PATH = join(process.cwd(), 'shop-proto-repo/api');
+const PROTO_BASE_PATH = join(
+  process.cwd(),
+  'node_modules/@legendaryneobatman/shop-proto-repo/api',
+);
 
-type Paths = Record<
-  string,
-  { messages: string; models: string; service: string }
->;
+type Paths = Record<string, string>;
 
 export class GRPCProtoConfig {
-  private static readonly packages = ['auth.v1', 'user.v1'];
+  private static readonly packages = [
+    AUTH_V1_PACKAGE_NAME,
+    USER_V1_PACKAGE_NAME,
+  ];
 
   private static readonly paths: Paths = {
-    auth: {
-      messages: join(PROTO_BASE_PATH, 'auth/v1/auth_messages.proto'),
-      models: join(PROTO_BASE_PATH, 'auth/v1/auth_models.proto'),
-      service: join(PROTO_BASE_PATH, 'auth/v1/auth_service.proto'),
-    },
-    user: {
-      messages: join(PROTO_BASE_PATH, 'user/v1/user_messages.proto'),
-      models: join(PROTO_BASE_PATH, 'user/v1/user_models.proto'),
-      service: join(PROTO_BASE_PATH, 'user/v1/user_service.proto'),
-    },
+    auth: join(PROTO_BASE_PATH, 'v1/auth.proto'),
+    user: join(PROTO_BASE_PATH, 'v1/user.proto'),
   };
 
   static getPackages(): string[] {
@@ -28,18 +25,16 @@ export class GRPCProtoConfig {
   }
 
   static getAllPaths(): string[] {
-    return Object.values(this.paths).flatMap((obj) => Object.values(obj));
+    return Object.values(this.paths);
   }
 
   static getAuthPaths(): string[] {
-    return Object.values(this.paths.auth);
+    return [this.paths.auth];
   }
 
   static getUserPaths(): string[] {
-    return Object.values(this.paths.user);
+    return [this.paths.user];
   }
 }
 
 export const SHOP_AUTH_URL = `${process.env.SHOP_AUTH_CONTAINER_NAME}:${process.env.SHOP_AUTH_EXPOSE_PORT}`;
-
-console.log('2', GRPCProtoConfig.getAllPaths());

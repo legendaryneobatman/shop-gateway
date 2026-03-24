@@ -2,11 +2,9 @@ import { Module } from '@nestjs/common';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 import { ClientsModule, Transport } from '@nestjs/microservices';
-import { GRPCProtoConfig, SHOP_AUTH_URL } from '../config/grpc.config';
-import { join } from 'path';
+import { GRPCProtoConfig } from '../config/grpc.config';
 
-console.log(GRPCProtoConfig.getAllPaths());
-console.log('protoPath', join(__dirname, '../shop-proto-repo/api/'));
+export const SHOP_AUTH_URL = `${process.env.SHOP_AUTH_CONTAINER_NAME}:${process.env.SHOP_AUTH_EXPOSE_PORT}`;
 
 @Module({
   imports: [
@@ -16,8 +14,8 @@ console.log('protoPath', join(__dirname, '../shop-proto-repo/api/'));
         transport: Transport.GRPC,
         options: {
           url: SHOP_AUTH_URL,
-          package: GRPCProtoConfig.getPackages()[0],
-          protoPath: GRPCProtoConfig.getAuthPaths(),
+          package: GRPCProtoConfig.getPackages(),
+          protoPath: GRPCProtoConfig.getAllPaths(),
         },
       },
     ]),
