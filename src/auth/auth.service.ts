@@ -11,6 +11,7 @@ import type {
   SignUpResponseDTO,
 } from './auth.dto';
 import { AUTH_SERVICE_NAME } from '@legendaryneobatman/shop-proto-repo/gen/nest/api/v1/auth';
+import { AUTH_MODULE_INJECT_TOKEN } from './inject-token';
 
 interface AuthGrpcService {
   signIn(data: SignInRequestDTO): Observable<SignInResponseDTO>;
@@ -24,7 +25,7 @@ interface AuthGrpcService {
 export class AuthService implements OnModuleInit {
   private authGrpcService: AuthGrpcService;
 
-  constructor(@Inject('AUTH_PACKAGE') private client: ClientGrpc) {}
+  constructor(@Inject(AUTH_MODULE_INJECT_TOKEN) private client: ClientGrpc) {}
 
   onModuleInit() {
     this.authGrpcService =
@@ -38,12 +39,15 @@ export class AuthService implements OnModuleInit {
   async signUp(data: SignUpRequestDTO) {
     return firstValueFrom(this.authGrpcService.signUp(data));
   }
+
   async refresh(data: RefreshRequestDTO) {
     return firstValueFrom(this.authGrpcService.refresh(data));
   }
+
   async logout(data: LogoutRequestDTO) {
     await firstValueFrom(this.authGrpcService.logout(data));
   }
+
   async logoutAll() {
     await firstValueFrom(this.authGrpcService.logoutAll());
   }

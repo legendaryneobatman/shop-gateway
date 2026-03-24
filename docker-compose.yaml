@@ -13,7 +13,6 @@ services:
       - .env
     volumes:
       - .:/usr/src/app
-      - /usr/src/app/node_modules
     networks:
       - shop-network
     restart: unless-stopped
